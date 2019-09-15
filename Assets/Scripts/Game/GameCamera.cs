@@ -8,12 +8,19 @@ public class GameCamera : MonoBehaviour
     public float detectionMargin;
     public float speed;
 
+    public float minZoom;
+    public float maxZoom;
+
     private Vector3 top;
     private Vector3 right;
+
+    private Camera camera;
 
     // Start is called before the first frame update
     void Start()
     {
+        camera = GetComponent<Camera>();
+
         top = (Vector3.right + Vector3.forward) / 2;
         right = (Vector3.right - Vector3.forward) / 2;
     }
@@ -44,6 +51,8 @@ public class GameCamera : MonoBehaviour
         {
             move.z = aspectRatio;
         }
+
+        camera.orthographicSize = Mathf.Clamp(camera.orthographicSize - Input.mouseScrollDelta.y, minZoom, maxZoom);
 
         transform.position += (move.x * right + move.z * top) * speed;
     }
